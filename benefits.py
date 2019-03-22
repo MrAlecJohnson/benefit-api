@@ -1,31 +1,30 @@
 #!flask/bin/python
 from flask import Flask
+import datetime
 
 app = Flask(__name__)
 
 benefits = [
     {
-        'id': 1,
-        'benefit': u'Universal Credit',
-        'abbrev': u'UC',
-        'current': '2018-19'
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web',
-        'done': False
+        'ben_id': 1,
+        'name': 'Universal Credit',
+        'abbrev': 'UC'
     }
 ]
 
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+rates = [
+    {
+        'rate_id': 1,
+        'benefit': 1,
+        'element': 'housing element' # what if I wanted to capitalise?
+        'date': datetime(2018,4,1)
+    }
+]
+
+@app.route('/benefits/api/v1/rates', methods=['GET'])
 def get_tasks():
-    return jsonify({'tasks': tasks})
+    return jsonify({'rates': rates})
 
-
-@app.route('/')
-def index():
-    return "Flask test"
 
 if __name__ == '__main__':
     app.run(debug=True)
