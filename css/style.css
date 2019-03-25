@@ -1,0 +1,79 @@
+.revealable__heading:after {
+  display: none;
+}
+
+.revealable__heading {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+}
+
+.revealable__close {
+  display: flex;
+  align-items: center;
+}
+.revealable__close:before {
+  display: none;
+}
+.revealable__close span {
+  font-size: 30px;
+  padding-left: 8px;
+}
+
+.expand-close {
+  font-size: 30px;
+  line-height: 24px;
+  padding-left: 16px;
+}
+
+.brexit-headline {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  background-color: #fcbb69;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.brexit-headline svg {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.brexit-content {
+  padding: 12px;
+  background-color: #fde5c4;
+}
+.brexit-content .c-fieldset {
+  margin-top: 10px;
+}
+
+.notice-input {
+  max-width: 350px;
+}
+
+.signup-button {
+  display: inline-block;
+  font-weight: 600;
+  border-radius: 0.125rem;
+  border-width: 0.125rem;
+  border-style: solid;
+  background-color: white;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 24px;
+  line-height: 1.5rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 14px;
+  padding-left: 14px;
+  border-color: #81cec6;
+  color: #004b88;
+  margin-top: 16px;
+}
+.signup-button:hover, .signup-button:focus {
+  background-color: #eaf9f7;
+  border-width: 0.125rem;
+}
