@@ -10,7 +10,18 @@ benefits = [
         'ben_id': 1,
         'name': 'Universal Credit',
         'abbrev': 'uc'
+    },
+     {
+        'ben_id': 2,
+        'name': 'Attendance Allowance',
+        'abbrev': 'aa'
+    },
+    {
+        'ben_id': 3,
+        'name': 'Jobseeker\'s Allowance',
+        'abbrev': 'jsa'
     }
+     
 ]
 
 # I'll need to put these in MySQL or a proper database at some point
@@ -23,33 +34,53 @@ rates = [
         'amount': 56,
     },
     
-        {
+     {
         'rate_id': 2,
         'ben_id': 1,
         'element': 'disability', 
         'date': datetime.date(2018,4,1),
         'amount': 96,
     },
-                    {
-        'rate_id': 1,
+    {
+        'rate_id': 3,
         'ben_id': 1,
         'element': 'housing', 
         'date': datetime.date(2017,4,1),
         'amount': 55,
     },
     
-        {
-        'rate_id': 2,
+    {
+        'rate_id': 4,
         'ben_id': 1,
         'element': 'disability', 
         'date': datetime.date(2017,4,1),
         'amount': 95,
         
+    },
+    {
+        'rate_id': 5,
+        'ben_id': 2,
+        'element': 'basic', 
+        'date': datetime.date(2018,4,1),
+        'amount': 76,
+        
+    },
+    {
+        'rate_id': 6,
+        'ben_id': 3,
+        'element': 'newstyle', 
+        'date': datetime.date(2018,4,1),
+        'amount': 42,
+        
     }
+
+
 
 ]
 
 def findBenefit(abbrev):
+    """Looks up a benefit abbreviation and returns that benefit's id
+    So you can look it up in the rates table"""
     benefit = str(abbrev).lower()
     for x in benefits:
         if x['abbrev'] == benefit:
@@ -57,8 +88,25 @@ def findBenefit(abbrev):
 
 @app.errorhandler(404)
 def not_found(error):
+    """Slightly clearer error reporting"""
     return flask.make_response(flask.jsonify({'error': 'Not found'}), 404)
 
+@app.route('/benefits/api/v1/all-benefits/<string:order>/', methods = ['GET'])
+@app.route('/benefits/api/v1/all-benefits/', defaults = {'order': 'name'}, methods = ['GET'])
+def allBenefits(order):
+    """Returns all benefits with abbreviations and IDs - order optional"""
+    ordered = sorted(benefits, key = lambda x: x[order])
+    return flask.jsonify(ordered)
+
+
+@app.route('/benefits/api/v1/all-elements/<string:benefit>/<string:order>', methods = ['GET'])
+@app.route('/benefits/api/v1/all-elements/<string:benefit>/', defaults = {'order': 'element'}, methods = ['GET'])
+def allElements(benefit, order):
+    """Returns all the elements for a given benefit - order optional"""
+    ben_id = findBenefit(benefit)
+    results = [e for e in rates if e['ben_id'] == ben_id]
+    ordered = sorted(results, key = lambda x: x[order])
+    return flask.jsonify(ordered)
 
 @app.route('/benefits/api/v1/<string:benefit>/', defaults = {'element': None, 'year': None}, methods=['GET'])
 @app.route('/benefits/api/v1/<string:benefit>/<string:element>/', defaults = {'year': None}, methods=['GET'])
@@ -124,4 +172,4 @@ def getCurrent(benefit, element):
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug = True, port = 5000)
