@@ -195,7 +195,12 @@ def newRate():
     if (element, startDate) in datePlusElement:
         flask.abort(406)
     else:
-        rates.append({'ben_id': ben_id, 'element': element, 'date': startDate, 'amount': money, 'id': max(ids) + 1})
+        # Not sure I need this - deletions will be rare
+        for x in range(1, len(ids) + 2):
+            if x not in ids:
+                smallest = x
+                break
+        rates.append({'ben_id': ben_id, 'element': element, 'date': startDate, 'amount': money, 'id': smallest})
     
     return 'Added'
 
@@ -225,6 +230,14 @@ def changeRate():
     rates.append(entry)
     
     return 'Changed'
+
+@app.route('/benefits/api/v1/delete/<int:rate_id>', methods = ['DELETE'])
+def delRate(rate_id):
+    ids = [e['id'] for e in rates]
+    index = ids.index(rate_id)
+    del rates[index]
+    return 'Deleted'
+
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5000)
