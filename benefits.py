@@ -31,6 +31,7 @@ rates = [
         'element': 'housing',
         'date': datetime.date(2018,4,1),
         'amount': 56,
+        'id': 1
     },
     
      {
@@ -38,12 +39,14 @@ rates = [
         'element': 'disability', 
         'date': datetime.date(2018,4,1),
         'amount': 96,
+        'id': 2
     },
     {
         'ben_id': 1,
         'element': 'housing', 
         'date': datetime.date(2017,4,1),
         'amount': 55,
+        'id': 3
     },
     
     {
@@ -51,6 +54,7 @@ rates = [
         'element': 'disability', 
         'date': datetime.date(2017,4,1),
         'amount': 95,
+        'id': 4
         
     },
     {
@@ -58,6 +62,7 @@ rates = [
         'element': 'basic', 
         'date': datetime.date(2018,4,1),
         'amount': 76,
+        'id': 5
         
     },
     {
@@ -65,6 +70,7 @@ rates = [
         'element': 'newstyle', 
         'date': datetime.date(2018,4,1),
         'amount': 42,
+        'id': 6
         
     }
 
@@ -164,8 +170,8 @@ def getCurrent(benefit, element):
 def newRate():
     benefit = flask.request.args.get('benefit')
     element = flask.request.args.get('element')
-    date = flask.request.args.get('date')
     amount = flask.request.args.get('amount')
+    date = flask.request.args.get('date')
     
     # check benefit
     ben_id = findBenefit(benefit)
@@ -177,17 +183,48 @@ def newRate():
         flask.abort(400)
     # convert date - should be in 20180130 format
     if len(date) != 8:
-        return 'date'
         flask.abort(400)
     startDate = datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:8]))
     
     # check amount
     money = round(float(amount), 2)
-
-    # add new entry to the list
-    rates.append({'ben_id': ben_id, 'element': element, 'date': startDate, 'amount': money})
+    
+    # check if it should be an update instead of a new entry
+    datePlusElement = {(e['element'], e['date']) for e in rates if e['ben_id'] == ben_id}
+    ids = [e['id'] for e in rates]
+    if (element, startDate) in datePlusElement:
+        flask.abort(406)
+    else:
+        rates.append({'ben_id': ben_id, 'element': element, 'date': startDate, 'amount': money, 'id': max(ids) + 1})
     
     return 'Added'
+
+@app.route('/benefits/api/v1/update', methods = ['PUT'])
+def changeRate():
+    target = int(flask.request.args.get('id'))
+    benefit = flask.request.args.get('benefit', default = None)
+    element = flask.request.args.get('element', default = None)
+    amount = round(float(flask.request.args.get('amount', default = None)), 2)
+    date = flask.request.args.get('date', default = None)
+    
+    ids = [e['id'] for e in rates]
+    index = ids.index(target)
+    entry = rates.pop(index)
+    if benefit:
+        ben_id = findBenefit(benefit)
+        entry['ben_id'] = ben_id
+    if element:
+        entry['element'] = element
+    if amount:
+        entry['amount'] = amount
+    if date:
+        if len(date) != 8:
+            flask.abort(400)
+        startDate = datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:8]))
+        entry['date'] = startDate
+    rates.append(entry)
+    
+    return 'Changed'
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5000)
