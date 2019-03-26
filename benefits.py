@@ -27,7 +27,6 @@ benefits = [
 # I'll need to put these in MySQL or a proper database at some point
 rates = [
     {
-        'rate_id': 1,
         'ben_id': 1,
         'element': 'housing',
         'date': datetime.date(2018,4,1),
@@ -35,14 +34,12 @@ rates = [
     },
     
      {
-        'rate_id': 2,
         'ben_id': 1,
         'element': 'disability', 
         'date': datetime.date(2018,4,1),
         'amount': 96,
     },
     {
-        'rate_id': 3,
         'ben_id': 1,
         'element': 'housing', 
         'date': datetime.date(2017,4,1),
@@ -50,7 +47,6 @@ rates = [
     },
     
     {
-        'rate_id': 4,
         'ben_id': 1,
         'element': 'disability', 
         'date': datetime.date(2017,4,1),
@@ -58,7 +54,6 @@ rates = [
         
     },
     {
-        'rate_id': 5,
         'ben_id': 2,
         'element': 'basic', 
         'date': datetime.date(2018,4,1),
@@ -66,7 +61,6 @@ rates = [
         
     },
     {
-        'rate_id': 6,
         'ben_id': 3,
         'element': 'newstyle', 
         'date': datetime.date(2018,4,1),
@@ -84,7 +78,7 @@ def findBenefit(abbrev):
     benefit = str(abbrev).lower()
     for x in benefits:
         if x['abbrev'] == benefit:
-            return x['ben_id']
+            return int(x['ben_id'])
 
 @app.errorhandler(404)
 def not_found(error):
@@ -166,10 +160,34 @@ def getCurrent(benefit, element):
         
         return flask.jsonify(current)
 
+@app.route('/benefits/api/v1/new', methods = ['POST'])
+def newRate():
+    benefit = flask.request.args.get('benefit')
+    element = flask.request.args.get('element')
+    date = flask.request.args.get('date')
+    amount = flask.request.args.get('amount')
+    
+    # check benefit
+    ben_id = findBenefit(benefit)
+    if ben_id not in [b['ben_id'] for b in benefits]:
+        flask.abort(400)
+    # check element
+    elements = {e['element'] for e in rates if e['ben_id'] == ben_id}
+    if element not in elements:
+        flask.abort(400)
+    # convert date - should be in 20180130 format
+    if len(date) != 8:
+        return 'date'
+        flask.abort(400)
+    startDate = datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:8]))
+    
+    # check amount
+    money = round(float(amount), 2)
 
-
-
-
+    # add new entry to the list
+    rates.append({'ben_id': ben_id, 'element': element, 'date': startDate, 'amount': money})
+    
+    return 'Added'
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5000)
