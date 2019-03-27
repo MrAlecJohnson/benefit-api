@@ -9,8 +9,8 @@ def index():
     return flask.render_template('mockup.html', 
                                  rate1 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/housing/').text,
                                  rate2 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/disability/').text,
-                                 housing2017 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/housing/2017').text,
-                                 housing2018 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/housing/2018').text,
+                                 housing2017 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2017').text,
+                                 housing2018 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2018').text,
                                  attendance = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/housing/').text,
                                  jsa = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/disability/').text)
 
