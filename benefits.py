@@ -101,12 +101,18 @@ def allBenefits(order):
 
 @app.route('/benefits/api/v1/all-elements/<string:benefit>/<string:order>', methods = ['GET'])
 @app.route('/benefits/api/v1/all-elements/<string:benefit>/', defaults = {'order': 'element'}, methods = ['GET'])
+@app.route('/benefits/api/v1/all-elements/', defaults = {'benefit': None, 'order': 'element'}, methods = ['GET'])
 def allElements(benefit, order):
     """Returns all the elements for a given benefit - order optional"""
-    ben_id = findBenefit(benefit)
-    results = [e for e in rates if e['ben_id'] == ben_id]
-    ordered = sorted(results, key = lambda x: x[order])
-    return flask.jsonify(ordered)
+    if benefit:
+        ben_id = findBenefit(benefit)
+        results = [e for e in rates if e['ben_id'] == ben_id]
+        ordered = sorted(results, key = lambda x: x[order])
+        return flask.jsonify(ordered)
+    else:
+        elements = {(e['element'], e['ben_id']) for e in rates}
+        ordered = sorted(elements, key = lambda x: x['ben_id'])
+        return flask.jsonify(ordered)
 
 @app.route('/benefits/api/v1/<string:benefit>/', defaults = {'element': None, 'year': None}, methods=['GET'])
 @app.route('/benefits/api/v1/<string:benefit>/<string:element>/', defaults = {'year': None}, methods=['GET'])

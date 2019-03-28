@@ -55,20 +55,35 @@
 
     <div class="articleContent">
         <div>
-	<p>Here are the benefits and their elements:</p>
-  <p>{{elementList}}</p>
+  <p>Here are the benefits:</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Benefit</th>
+      <th>Abbreviation</th>
+      <th>ID number</th>
+    </tr>
+  {% for row in benefitTable %}
+  <tr>
+    <td>{{row.name}}</td>
+    <td>{{row.abbrev}}</td>
+    <td>{{row.ben_id}}</td>
+    <td>{{row.elements}}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
   <div class="container mt-7">
-   <h1 class="h1">Update an element</h1>
+   <h1 class="h2">Update an element</h1>
 
    <div class="mb-7">
-    <label class="block bold mb-2" for="extent">Extent</label>
+    <label class="block bold mb-2" for="extent">Select the benefit to update</label>
     <div class="select">
-     <select id="extent">
+     <select name = "benefits" method = "GET" action = "/">
           <option value="Please select">Please select</option>
-          <option value="england">England</option>
-          <option value="wales">Wales</option>
-          <option value="scotland">Scotland</option>
-          <option value="n-ireland">N. Ireland</option>
+          {% for b in benefits %}
+          <option value="{{b}}">{{b}}</option>
+          {% endfor %}
         </select>
     </div>
    </div>
