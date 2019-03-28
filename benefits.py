@@ -111,7 +111,7 @@ def allElements(benefit, order):
         return flask.jsonify(ordered)
     else:
         elements = {(e['element'], e['ben_id']) for e in rates}
-        ordered = sorted(elements, key = lambda x: x['ben_id'])
+        ordered = sorted(elements, key = lambda x: x[1])
         return flask.jsonify(ordered)
 
 @app.route('/benefits/api/v1/<string:benefit>/', defaults = {'element': None, 'year': None}, methods=['GET'])
