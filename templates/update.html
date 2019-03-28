@@ -55,33 +55,58 @@
 
     <div class="articleContent">
         <div>
-	<p dir="ltr">Put a form here?</p>
-</ul>
-<p>Here's a table of previous years:</p>
-<div class="table-scroll"><table>
-<thead>
-<tr><th scope="col">Benefit</th><th scope="col">Rate</th></tr>
-</thead>
-<tbody>
-<tr>
-<td>Housing element 2017</td>
-<td>£{{housing2017}}</td>
-</tr>
-<tr>
-<td>Housing element 2018</td>
-<td>£{{housing2018}}</td>
-</tr>
-<tr>
-<td>Attendance Allowance</td>
-<td>£{{attendance}}</td>
-</tr>
-<tr>
-<td>Jobseeker's Allowance</td>
-<td>£{{jsa}}</td>
-</tr>
-</tbody>
-</table></div>
-<p>And that's all.</p>
+	<p>Here are the benefits and their elements:</p>
+  <p>{{elementList}}</p>
+  <div class="container mt-7">
+   <h1 class="h1">Update an element</h1>
+
+   <div class="mb-7">
+    <label class="block bold mb-2" for="extent">Extent</label>
+    <div class="select">
+     <select id="extent">
+          <option value="Please select">Please select</option>
+          <option value="england">England</option>
+          <option value="wales">Wales</option>
+          <option value="scotland">Scotland</option>
+          <option value="n-ireland">N. Ireland</option>
+        </select>
+    </div>
+   </div>
+
+ <form class="open-sans">
+    <div class="mb-5">
+     <div class="text-input inline-block is-invalid">
+       <label class="block bold mb-2 is-invalid" for="year">New benefit rate (in £):</label>
+       <input id="newRate" type="text" pattern="[0-9]+(\.[0-9]{2})*" minlength="1" class="block char-width-4">
+     </div>
+    </div>
+
+    <fieldset class="b-none p-0 m-0 mb-7 open-sans">
+     <legend class="block bold lh-2">Enter the date when the new rate starts</legend>
+     <span class="block mb-2 mid-grey">For example: 30 4 2017</span>
+
+     <div class="text-input inline-block mr-1">
+      <label class="block bold mb-2" for="day">Day:</label>
+      <input id="day" type="text" pattern="[0-9]{2}" maxlength="2" minlength="1" class="block char-width-2">
+     </div>
+
+     <div class="text-input inline-block mr-1">
+      <label class="block bold mb-2" for="month">Month:</label>
+      <input id="month" type="text" pattern="[0-9]{2}" maxlength="2" minlength="1" class="block char-width-2">
+     </div>
+
+     <div class="text-input inline-block">
+      <label class="block bold mb-2" for="year">Year:</label>
+      <input id="year" type="text" pattern="[0-9]{2}" maxlength="4" minlength="1" class="block char-width-4">
+     </div>
+    </fieldset>
+
+    <div class="mb-5">
+     <button type="submit" class="button">Submit</button>
+    </div>
+   </form>
+  </div>
+  <p>And that's all.</p>
 
 <footer class="c-global-footer u-spacingBottom--none" role="contentinfo" >
   <div class="c-wrap">
