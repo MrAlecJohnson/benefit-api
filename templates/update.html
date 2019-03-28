@@ -62,6 +62,7 @@
       <th>Benefit</th>
       <th>Abbreviation</th>
       <th>ID number</th>
+      <th>Elements</th>
     </tr>
   {% for row in benefitTable %}
   <tr>
@@ -76,10 +77,11 @@
   <div class="container mt-7">
    <h1 class="h2">Update an element</h1>
 
+ <form class="open-sans", method = "POST", action = "/posting">
    <div class="mb-7">
     <label class="block bold mb-2" for="extent">Select the benefit to update</label>
     <div class="select">
-     <select name = "benefits" method = "GET" action = "/">
+     <select name = "benefit">
           <option value="Please select">Please select</option>
           {% for b in benefits %}
           <option value="{{b}}">{{b}}</option>
@@ -87,32 +89,38 @@
         </select>
     </div>
    </div>
-
- <form class="open-sans">
+<br>
     <div class="mb-5">
      <div class="text-input inline-block is-invalid">
-       <label class="block bold mb-2 is-invalid" for="year">New benefit rate (in £):</label>
-       <input id="newRate" type="text" pattern="[0-9]+(\.[0-9]{2})*" minlength="1" class="block char-width-4">
+       <label class="block bold mb-2">Enter the element you're updating or adding</label>
+       <input id="Element" name = "element" type="text" minlength="1" class="block char-width-4">
      </div>
     </div>
-
+<br>
+       <div class="mb-5">
+        <div class="text-input inline-block is-invalid">
+          <label class="block bold mb-2 is-invalid">New benefit rate (in £):</label>
+          <input id="Rate" name = "rate" type="text" pattern="[0-9]+(\.[0-9]{2})*" minlength="1" class="block char-width-4">
+        </div>
+       </div>
+<br>
     <fieldset class="b-none p-0 m-0 mb-7 open-sans">
-     <legend class="block bold lh-2">Enter the date when the new rate starts</legend>
+     <legend class="block bold lh-2">Enter the date when the new rate starts:</legend>
      <span class="block mb-2 mid-grey">For example: 30 4 2017</span>
 
      <div class="text-input inline-block mr-1">
       <label class="block bold mb-2" for="day">Day:</label>
-      <input id="day" type="text" pattern="[0-9]{2}" maxlength="2" minlength="1" class="block char-width-2">
+      <input id="Day" name = "day" type="text" pattern="[0-9]{2}" maxlength="2" minlength="1" class="block char-width-2">
      </div>
 
      <div class="text-input inline-block mr-1">
       <label class="block bold mb-2" for="month">Month:</label>
-      <input id="month" type="text" pattern="[0-9]{2}" maxlength="2" minlength="1" class="block char-width-2">
+      <input id="Month" name = "month" type="text" pattern="[0-9]{2}" maxlength="2" minlength="1" class="block char-width-2">
      </div>
 
      <div class="text-input inline-block">
       <label class="block bold mb-2" for="year">Year:</label>
-      <input id="year" type="text" pattern="[0-9]{2}" maxlength="4" minlength="1" class="block char-width-4">
+      <input id="Year" name = "year" type="text" pattern="[0-9]{4}" maxlength="4" minlength="1" class="block char-width-4">
      </div>
     </fieldset>
 
@@ -121,7 +129,6 @@
     </div>
    </form>
   </div>
-  <p>And that's all.</p>
 
 <footer class="c-global-footer u-spacingBottom--none" role="contentinfo" >
   <div class="c-wrap">
@@ -136,7 +143,6 @@
 
 
 
-    <script  src="js/index.js"></script>
 
 
 

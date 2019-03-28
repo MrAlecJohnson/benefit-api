@@ -27,7 +27,19 @@ def form():
                              benefitTable = combined,
                              benefits = [b['name'] for b in benefitGet])
     
+@page.route('/posting', methods = ['POST'])
+def posting(benefit, element, rate, day, month, year):
+    benefit = flask.request.args.get('benefit')
+    element = flask.request.args.get('element')
+    amount = flask.request.args.get('rate')
+    day = str(flask.request.args.get('day'))
+    month = str(flask.request.args.get('day'))
+    year = str(flask.request.args.get('day'))
+    date = day + month + year
+    payload = None
+    requests.post('https://benefit-api.herokuapp.com/benefits/api/v1/new', data = payload)
 
+    return 'done'
 
 if __name__ == '__main__':
     page.run(debug = True, port = 5000)
