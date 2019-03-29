@@ -157,18 +157,18 @@ def getCurrent(benefit, element):
         element = str(element).lower()
         for x in rates:
             if x['ben_id'] == ben_id and x['element'] == element:
-                results[x['date'].year] = x['amount']
-        year = max([int(year) for year in results.keys()])
-        return str(results[year])
+                results[x['date']] = x['amount']
+        date = max([date for date in results.keys() if date <= datetime.date.today()])
+        return str(results[date])
     else:
         for x in rates:
             if x['ben_id'] == ben_id:
                 results[x['element']] = results.get(x['element'],{})
-                results[x['element']][x['date'].year] = x['amount']
+                results[x['element']][x['date']] = x['amount']
         current = {}
         for e in results: 
-            year = max([int(y) for y in results[e]]) 
-            current[e] = results[e][year]
+            date = max([date for date in results[e] if date <= datetime.date.today()]) 
+            current[e] = results[e][date]
         
         return flask.jsonify(current)
 

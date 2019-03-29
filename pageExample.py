@@ -30,12 +30,12 @@ def form():
     else:
         benefit = flask.request.form.get('benefit')
         element = flask.request.form.get('element')
-        amount = flask.request.form.get('rate')
+        amount = round(flask.request.form.get('rate'),2)
         day = str(flask.request.form.get('day'))
         month = str(flask.request.form.get('month'))
         year = str(flask.request.form.get('year'))
         
-        date = day + month + year
+        date = year + month + day
 
         combined = 'benefit=' + benefit + '&element=' + element + '&date=' + date + '&amount=' + amount    
         
@@ -44,4 +44,4 @@ def form():
         return str(combined)
 
 if __name__ == '__main__':
-    page.run(debug = True, port = 5000)
+    page.run(debug = True, port = 5001)
