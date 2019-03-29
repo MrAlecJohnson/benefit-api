@@ -4,6 +4,7 @@ import json
 
 page = flask.Flask(__name__)
 
+# This tells the html template to ask the API for values for its variables
 @page.route('/mockup', methods = ["GET"])
 def index():
 
@@ -13,6 +14,7 @@ def index():
                                  housing2017 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2017').text,
                                  housing2018 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2018').text)
 
+# If it's a get, ask the API for the lists of benefits and elements
 @page.route('/update', methods = ["GET", "POST"])
 def form():
     if flask.request.method == 'GET':
@@ -25,6 +27,8 @@ def form():
         return flask.render_template('update.html',
                                  benefitTable = combined,
                                  benefits = [b['abbrev'] for b in benefitGet])
+    # If it's a post, that means they're submitting the form
+    # So turn the form entries into the arguments for the API's post request
     else:
         benefit = str(flask.request.form.get('benefit'))
         element = str(flask.request.form.get('element'))
