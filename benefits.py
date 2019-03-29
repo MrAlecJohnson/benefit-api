@@ -126,26 +126,26 @@ def getValue(benefit, element, year):
         if year:
             for x in rates:
                 if x['ben_id'] == ben_id and x['element'] == element and x['date'].year == year:
-                    return round(x['amount'],2)
+                    return '%.2f' % round(x['amount'],2)
         else:
             results = {}
             for x in rates:
                 if x['ben_id'] == ben_id and x['element'] == element:
-                    results[x['date'].year] = round(x['amount'],2)
+                    results[x['date'].year] = '%.2f' % round(x['amount'],2)
             return flask.jsonify(results)
     else:
         if year:
             results = {}
             for x in rates:
                 if x['ben_id'] == ben_id and x['date'].year == year:
-                    results[x['element']] = round(x['amount'],2)
+                    results[x['element']] = '%.2f' % round(x['amount'],2)
             return flask.jsonify(results)
         else:
             results = {}
             for x in rates:
                 if x['ben_id'] == ben_id:
                     results[x['date'].year] = results.get(x['date'].year,{})
-                    results[x['date'].year][x['element']] = round(x['amount'],2)
+                    results[x['date'].year][x['element']] = '%.2f' % round(x['amount'],2)
             return flask.jsonify(results)
             
 @app.route('/benefits/api/v1/current/<string:benefit>/<string:element>/', methods=['GET'])
@@ -157,14 +157,14 @@ def getCurrent(benefit, element):
         element = str(element).lower()
         for x in rates:
             if x['ben_id'] == ben_id and x['element'] == element:
-                results[x['date']] = round(x['amount'],2)
+                results[x['date']] = '%.2f' % round(x['amount'],2)
         date = max([date for date in results.keys() if date <= datetime.date.today()])
         return results[date]
     else:
         for x in rates:
             if x['ben_id'] == ben_id:
                 results[x['element']] = results.get(x['element'],{})
-                results[x['element']][x['date']] = round(x['amount'],2)
+                results[x['element']][x['date']] = '%.2f' % round(x['amount'],2)
         current = {}
         for e in results: 
             date = max([date for date in results[e] if date <= datetime.date.today()]) 
