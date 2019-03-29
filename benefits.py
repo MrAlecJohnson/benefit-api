@@ -30,7 +30,7 @@ rates = [
         'ben_id': 1,
         'element': 'housing',
         'date': datetime.date(2018,4,1),
-        'amount': 56,
+        'amount': float(56.00),
         'id': 1
     },
     
@@ -38,14 +38,14 @@ rates = [
         'ben_id': 1,
         'element': 'disability', 
         'date': datetime.date(2018,4,1),
-        'amount': 96,
+        'amount': float(96.00),
         'id': 2
     },
     {
         'ben_id': 1,
         'element': 'housing', 
         'date': datetime.date(2017,4,1),
-        'amount': 55,
+        'amount': float(55.00),
         'id': 3
     },
     
@@ -53,7 +53,7 @@ rates = [
         'ben_id': 1,
         'element': 'disability', 
         'date': datetime.date(2017,4,1),
-        'amount': 95,
+        'amount': float(95.00),
         'id': 4
         
     },
@@ -61,7 +61,7 @@ rates = [
         'ben_id': 2,
         'element': 'basic', 
         'date': datetime.date(2018,4,1),
-        'amount': 76,
+        'amount': float(76.00,
         'id': 5
         
     },
@@ -69,7 +69,7 @@ rates = [
         'ben_id': 3,
         'element': 'newstyle', 
         'date': datetime.date(2018,4,1),
-        'amount': 42,
+        'amount': float(42.00),
         'id': 6
         
     }
@@ -126,26 +126,26 @@ def getValue(benefit, element, year):
         if year:
             for x in rates:
                 if x['ben_id'] == ben_id and x['element'] == element and x['date'].year == year:
-                    return str(x['amount'])
+                    return str(round(x['amount'],2))
         else:
             results = {}
             for x in rates:
                 if x['ben_id'] == ben_id and x['element'] == element:
-                    results[x['date'].year] = x['amount']
+                    results[x['date'].year] = str(round(x['amount'],2))
             return flask.jsonify(results)
     else:
         if year:
             results = {}
             for x in rates:
                 if x['ben_id'] == ben_id and x['date'].year == year:
-                    results[x['element']] = x['amount']
+                    results[x['element']] = str(round(x['amount'],2))
             return flask.jsonify(results)
         else:
             results = {}
             for x in rates:
                 if x['ben_id'] == ben_id:
                     results[x['date'].year] = results.get(x['date'].year,{})
-                    results[x['date'].year][x['element']] = x['amount']
+                    results[x['date'].year][x['element']] = str(round(x['amount'],2))
             return flask.jsonify(results)
             
 @app.route('/benefits/api/v1/current/<string:benefit>/<string:element>/', methods=['GET'])
@@ -157,14 +157,14 @@ def getCurrent(benefit, element):
         element = str(element).lower()
         for x in rates:
             if x['ben_id'] == ben_id and x['element'] == element:
-                results[x['date']] = x['amount']
+                results[x['date']] = str(round(x['amount'],2))
         date = max([date for date in results.keys() if date <= datetime.date.today()])
         return str(results[date])
     else:
         for x in rates:
             if x['ben_id'] == ben_id:
                 results[x['element']] = results.get(x['element'],{})
-                results[x['element']][x['date']] = x['amount']
+                results[x['element']][x['date']] = str(round(x['amount'],2))
         current = {}
         for e in results: 
             date = max([date for date in results[e] if date <= datetime.date.today()]) 

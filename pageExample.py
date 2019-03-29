@@ -11,9 +11,7 @@ def index():
                                  rate1 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/housing/').text,
                                  rate2 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/disability/').text,
                                  housing2017 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2017').text,
-                                 housing2018 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2018').text,
-                                 attendance = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/housing/').text,
-                                 jsa = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/current/uc/disability/').text)
+                                 housing2018 = requests.get('https://benefit-api.herokuapp.com/benefits/api/v1/uc/housing/2018').text)
 
 @page.route('/update', methods = ["GET", "POST"])
 def form():
@@ -28,9 +26,9 @@ def form():
                                  benefitTable = combined,
                                  benefits = [b['abbrev'] for b in benefitGet])
     else:
-        benefit = flask.request.form.get('benefit')
-        element = flask.request.form.get('element')
-        amount = round(flask.request.form.get('rate'),2)
+        benefit = str(flask.request.form.get('benefit'))
+        element = str(flask.request.form.get('element'))
+        amount = str(flask.request.form.get('rate'))
         day = str(flask.request.form.get('day'))
         month = str(flask.request.form.get('month'))
         year = str(flask.request.form.get('year'))
@@ -41,7 +39,7 @@ def form():
         
         requests.post('https://benefit-api.herokuapp.com/benefits/api/v1/new?' + combined)
 
-        return str(combined)
+        return 'New rate added'
 
 if __name__ == '__main__':
     page.run(debug = True, port = 5001)
