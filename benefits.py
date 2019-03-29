@@ -61,7 +61,7 @@ rates = [
         'ben_id': 2,
         'element': 'basic', 
         'date': datetime.date(2018,4,1),
-        'amount': float(76.00,
+        'amount': float(76.00),
         'id': 5
         
     },
